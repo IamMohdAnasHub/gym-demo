@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Iron Beast Gym | Premium Demo</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap');
+
+/* ===== THEME (DEFAULT LIGHT) ===== */
+:root{
+  --bg1:#f8fafc;
+  --bg2:#ffffff;
+  --text:#0f172a;
+  --muted:#475569;
+  --glass:rgba(0,0,0,.04);
+  --border:rgba(0,0,0,.08);
+
+  --red:#ef4444;
+  --green:#22c55e;
+  --blue:#3b82f6;
+}
+
+body.dark{
+  --bg1:#020617;
+  --bg2:#0b1220;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --glass:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.12);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(900px 500px at 15% 10%, rgba(239,68,68,.12), transparent 60%),
+    radial-gradient(900px 500px at 85% 25%, rgba(59,130,246,.10), transparent 60%),
+    linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg1));
+  overflow-x:hidden;
+  transition:background .35s ease, color .35s ease;
+}
+
+/* ===== Topbar ===== */
+.topbar{
+  position:fixed; inset:0 0 auto 0;
+  z-index:50;
+  background:rgba(255,255,255,.60);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+body.dark .topbar{
+  background:rgba(2,6,23,.55);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.container{width:min(1120px,92%); margin:auto}
+
+.nav{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  font-weight:800; letter-spacing:.4px;
+  white-space:nowrap;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--red);
+  box-shadow:0 0 18px rgba(239,68,68,.45);
+}
+.navlinks{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
+.navlinks a{
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:700;
+  font-size:14px;
+  padding:8px 10px;
+  border-radius:12px;
+  transition:.2s;
+}
+.navlinks a:hover{color:var(--text); background:rgba(0,0,0,.06)}
+body.dark .navlinks a:hover{background:rgba(255,255,255,.06)}
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:10px 14px;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:800;
+  transition:.25s;
+  position:relative; overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--glass);
+  color:var(--text);
+  cursor:pointer;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{
+  border:none;
+  background:linear-gradient(45deg,var(--red),#fb7185);
+  color:white;
+  box-shadow:0 18px 40px rgba(239,68,68,.18);
+}
+.btn.primary:hover{box-shadow:0 22px 50px rgba(239,68,68,.35)}
+.btn.small{padding:9px 12px; border-radius:12px; font-size:13px}
+
+/* Theme Toggle button */
+.theme-toggle{
+  min-width:44px;
+}
+
+/* Ripple */
+.ripple{
+  position:absolute;border-radius:50%;
+  transform:scale(0);
+  background:rgba(255,255,255,.35);
+  animation:ripple .6s linear;
+  pointer-events:none;
+}
+@keyframes ripple{to{transform:scale(4);opacity:0;}}
+
+/* ===== Hero ===== */
+.hero{
+  padding:110px 0 58px;
+  min-height:95vh;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:26px;
+  align-items:center;
+}
+.kicker{
+  display:inline-flex; gap:8px; align-items:center;
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid rgba(239,68,68,.25);
+  background:rgba(239,68,68,.10);
+  color:#b91c1c;
+  font-weight:800;
+  font-size:13px;
+}
+body.dark .kicker{ color:#fecaca; }
+
+h1{
+  margin:14px 0 10px;
+  font-size:54px;
+  line-height:1.05;
+}
+.grad{
+  background:linear-gradient(90deg,var(--red),#fb7185,var(--blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.sub{
+  color:var(--muted);
+  line-height:1.75;
+  max-width:640px;
+}
+
+.hero-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+.stats{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+.stat{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:12px 14px;
+  backdrop-filter:blur(10px);
+}
+.stat b{display:block; font-size:16px}
+.stat span{font-size:13px; color:var(--muted)}
+
+/* Hero Media Card */
+.media{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:24px;
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+  box-shadow:0 25px 70px rgba(0,0,0,.10);
+  position:relative;
+}
+body.dark .media{ box-shadow:0 25px 70px rgba(0,0,0,.45); }
+
+.media::before{
+  content:"";
+  position:absolute;
+  width:280px;height:280px;border-radius:50%;
+  background:rgba(239,68,68,.18);
+  filter:blur(100px);
+  top:-110px; right:-110px;
+}
+.hero-img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  display:block;
+  border-bottom:1px solid var(--border);
+}
+.media-body{
+  padding:18px;
+  position:relative;
+  z-index:2;
+}
+.media-body h3{margin:0 0 8px}
+.media-body p{margin:0; color:var(--muted); line-height:1.7}
+.pills{
+  margin-top:14px;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.pills span{
+  font-size:12px;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.10);
+  color:var(--text);
+  font-weight:700;
+}
+body.dark .pills span{ background:rgba(255,255,255,.06); }
+.pills .hot{
+  border-color:rgba(239,68,68,.25);
+  background:rgba(239,68,68,.10);
+  color:#b91c1c;
+}
+body.dark .pills .hot{ color:#fecaca; }
+
+/* Sections */
+section{padding:86px 0}
+.section-title{margin:0 0 8px; font-size:30px}
+.section-sub{margin:0; color:var(--muted); line-height:1.7}
+
+/* Cards grid */
+.grid{
+  margin-top:26px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:16px;
+}
+.card{
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:18px;
+  backdrop-filter:blur(10px);
+  transition:.25s;
+}
+.card:hover{transform:translateY(-6px); box-shadow:0 22px 60px rgba(0,0,0,.12)}
+body.dark .card:hover{ box-shadow:0 22px 60px rgba(0,0,0,.35); }
+.card h3{margin:0 0 6px}
+.card p{margin:0; color:var(--muted); line-height:1.65}
+
+/* Program icons */
+.icon{
+  width:44px;height:44px;border-radius:14px;
+  display:grid; place-items:center;
+  background:rgba(239,68,68,.12);
+  border:1px solid rgba(239,68,68,.22);
+  margin-bottom:12px;
+  font-size:18px;
+}
+
+/* Trainers */
+.trainer{
+  display:flex;
+  gap:14px;
+  align-items:center;
+}
+.avatar{
+  width:62px;height:62px;border-radius:18px;
+  object-fit:cover;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.10);
+}
+body.dark .avatar{ background:rgba(255,255,255,.06); }
+.tmeta b{display:block}
+.tmeta span{color:var(--muted); font-size:13px}
+
+/* Pricing */
+.price{
+  font-size:30px;
+  font-weight:900;
+  margin:12px 0 6px;
+  color:#b91c1c;
+}
+body.dark .price{ color:#fecaca; }
+
+.list{
+  margin:0;
+  padding-left:18px;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:14px;
+}
+.badge{
+  display:inline-flex;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  background:rgba(59,130,246,.12);
+  border:1px solid rgba(59,130,246,.22);
+  color:#1d4ed8;
+}
+body.dark .badge{ color:#bfdbfe; }
+
+/* Testimonials */
+.quote{
+  margin-top:18px;
+  padding:18px;
+  border-radius:22px;
+  border:1px solid var(--border);
+  background:var(--glass);
+}
+.quote p{margin:0; color:var(--muted); line-height:1.7}
+.quote b{display:block; margin-top:10px; color:var(--text)}
+
+/* CTA Banner */
+.banner{
+  margin-top:26px;
+  border-radius:24px;
+  padding:22px;
+  background:linear-gradient(135deg, rgba(239,68,68,.12), rgba(59,130,246,.10));
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.banner p{margin:0; color:var(--muted); line-height:1.6}
+.banner b{color:var(--text)}
+
+/* Contact */
+.contact-box{
+  margin-top:18px;
+  padding:18px;
+  border-radius:22px;
+  border:1px solid var(--border);
+  background:var(--glass);
+}
+.contact-actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
+
+/* Floating WhatsApp + Call */
+.float{
+  position:fixed;
+  right:16px;
+  bottom:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:200;
+}
+.float a{
+  width:52px; height:52px;
+  display:grid; place-items:center;
+  border-radius:18px;
+  text-decoration:none;
+  color:var(--text);
+  background:var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter:blur(12px);
+  box-shadow:0 18px 40px rgba(0,0,0,.12);
+  transition:.25s;
+  font-size:20px;
+}
+body.dark .float a{ box-shadow:0 18px 40px rgba(0,0,0,.35); }
+.float a:hover{transform:translateY(-3px) scale(1.03)}
+.float .wa{border-color:rgba(34,197,94,.30)}
+.float .call{border-color:rgba(59,130,246,.30)}
+
+/* Reveal */
+.reveal{opacity:0; transform:translateY(22px); transition:.7s ease;}
+.reveal.show{opacity:1; transform:translateY(0);}
+
+/* Footer */
+footer{
+  padding:34px 0;
+  text-align:center;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+  font-size:14px;
+}
+
+/* Mobile */
+@media(max-width:980px){
+  .hero{grid-template-columns:1fr; text-align:center; padding-top:140px}
+  .sub{margin:0 auto}
+  .hero-actions{justify-content:center}
+  .stats{justify-content:center}
+  h1{font-size:40px}
+  .nav{flex-wrap:wrap; justify-content:center}
+  .brand{width:100%; justify-content:center}
+  .navlinks{width:100%; justify-content:center}
+}
+</style>
+</head>
+
+<body>
+<!-- NAV -->
+<div class="topbar">
+  <div class="container nav">
+    <div class="brand"><span class="dot"></span> Iron Beast Gym</div>
+
+    <div class="navlinks">
+      <a href="#programs">Programs</a>
+      <a href="#trainers">Trainers</a>
+      <a href="#pricing">Plans</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+      <!-- THEME TOGGLE -->
+      <button class="btn small theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme">🌙</button>
+
+      <a class="btn small" href="#pricing">View Plans</a>
+      <a class="btn primary small" href="#contact">Join Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="container hero" id="top">
+  <div>
+    <span class="kicker">Premium Fitness • Strength • Transformation</span>
+    <h1>Build your <span class="grad">strongest</span> version.</h1>
+    <p class="sub">
+      A modern gym experience with certified trainers, structured programs, and a discipline-first routine.
+      Perfect for fat loss, muscle gain, and overall fitness.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="#contact">Free Trial Session</a>
+      <a class="btn" href="#programs">Explore Programs</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>10+ Programs</b><span>Beginner → Pro</span></div>
+      <div class="stat"><b>Certified Trainers</b><span>Proper guidance</span></div>
+      <div class="stat"><b>Flexible Timings</b><span>Morning & evening</span></div>
+    </div>
+  </div>
+
+  <div class="media">
+    <!-- Optional image: upload gym-hero.jpg in repo -->
+    <img class="hero-img" src="gym-hero.jpg" alt="Gym Hero"
+         onerror="this.style.display='none'; document.getElementById('heroFallback').style.display='flex';">
+    <div id="heroFallback" style="display:none; height:260px; align-items:center; justify-content:center; color:var(--muted); font-weight:800; letter-spacing:.4px;">
+      Add <span style="color:var(--red); margin-left:6px;">gym-hero.jpg</span> (optional)
+    </div>
+
+    <div class="media-body">
+      <h3>What you get</h3>
+      <p>Training plan + form correction + progress tracking. Clean, serious, no fake vibes.</p>
+
+      <div class="pills">
+        <span class="hot">Fat Loss</span>
+        <span>Strength</span>
+        <span>Muscle Gain</span>
+        <span>Diet Guidance</span>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+        <a class="btn small primary" href="https://wa.me/919876543210" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn small" href="tel:+919876543210">Call</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- PROGRAMS -->
+  <section id="programs" class="reveal">
+    <h2 class="section-title">Programs</h2>
+    <p class="section-sub">Choose a goal. Follow the plan. Track progress weekly.</p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🏋️</div>
+        <h3>Strength Training</h3>
+        <p>Compound lifts, form correction, progressive overload — done the right way.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🔥</div>
+        <h3>Fat Loss Program</h3>
+        <p>Workout + basic diet guidance + weekly check-ins for sustainable results.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">⚡</div>
+        <h3>HIIT + Conditioning</h3>
+        <p>Improve stamina, burn calories, get athletic — short and effective sessions.</p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🧘</div>
+        <h3>Mobility & Recovery</h3>
+        <p>Stretching & mobility routines to stay injury-free and move better.</p>
+      </div>
+    </div>
+
+    <div class="banner">
+      <p><b>Tip:</b> “Free Trial + WhatsApp Support” converts fast for gym owners.</p>
+      <a class="btn primary" href="#contact">Book Trial</a>
+    </div>
+  </section>
+
+  <!-- TRAINERS -->
+  <section id="trainers" class="reveal">
+    <h2 class="section-title">Trainers</h2>
+    <p class="section-sub">Guidance matters. Good form = good results.</p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="trainer">
+          <img class="avatar" src="trainer1.jpg" alt="Trainer" onerror="this.style.display='none'">
+          <div class="tmeta">
+            <b>Arjun Verma</b>
+            <span>Strength Coach</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;">Form, strength basics, compound lifts and progressive plans.</p>
+      </div>
+
+      <div class="card">
+        <div class="trainer">
+          <img class="avatar" src="trainer2.jpg" alt="Trainer" onerror="this.style.display='none'">
+          <div class="tmeta">
+            <b>Neha Singh</b>
+            <span>Fat Loss Specialist</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;">Fat loss routines, habit building, and consistency coaching.</p>
+      </div>
+
+      <div class="card">
+        <div class="trainer">
+          <img class="avatar" src="trainer3.jpg" alt="Trainer" onerror="this.style.display='none'">
+          <div class="tmeta">
+            <b>Rohit Khan</b>
+            <span>Conditioning Coach</span>
+          </div>
+        </div>
+        <p style="margin-top:12px;">HIIT, stamina, athletic movement, and recovery routines.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="reveal">
+    <h2 class="section-title">Membership Plans</h2>
+    <p class="section-sub">Simple pricing. Clean value. (Demo prices)</p>
+
+    <div class="grid">
+      <div class="card">
+        <span class="badge">Starter</span>
+        <h3 style="margin-top:10px;">Monthly</h3>
+        <div class="price">₹1,499</div>
+        <ul class="list">
+          <li>All equipment access</li>
+          <li>Basic trainer guidance</li>
+          <li>Flexible timings</li>
+        </ul>
+        <div style="margin-top:14px;">
+          <a class="btn primary" href="#contact">Join Monthly</a>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(239,68,68,.25);">
+        <span class="badge">Most Popular</span>
+        <h3 style="margin-top:10px;">Quarterly</h3>
+        <div class="price">₹3,999</div>
+        <ul class="list">
+          <li>Best value plan</li>
+          <li>Weekly progress tracking</li>
+          <li>Program guidance</li>
+        </ul>
+        <div style="margin-top:14px;">
+          <a class="btn primary" href="#contact">Join Quarterly</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="badge">Premium</span>
+        <h3 style="margin-top:10px;">Personal Training</h3>
+        <div class="price">₹4,999</div>
+        <ul class="list">
+          <li>1-on-1 training</li>
+          <li>Custom plan + support</li>
+          <li>Form correction focus</li>
+        </ul>
+        <div style="margin-top:14px;">
+          <a class="btn primary" href="#contact">Book PT</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews" class="reveal">
+    <h2 class="section-title">Reviews</h2>
+    <p class="section-sub">Simple, honest feedback. This builds trust fast.</p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>“Serious vibe”</h3>
+        <p>“Trainers actually correct form. No time waste. Great routine.”</p>
+        <div style="margin-top:12px; color:var(--muted); font-weight:700;">— Member (Demo)</div>
+      </div>
+
+      <div class="card">
+        <h3>“Best for fat loss”</h3>
+        <p>“Weekly check-ins helped me stay consistent. Results came.”</p>
+        <div style="margin-top:12px; color:var(--muted); font-weight:700;">— Member (Demo)</div>
+      </div>
+
+      <div class="card">
+        <h3>“Clean equipment”</h3>
+        <p>“Machines are good, space is clean, timings are flexible.”</p>
+        <div style="margin-top:12px; color:var(--muted); font-weight:700;">— Member (Demo)</div>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p>“No fake promises — just discipline + plan + consistency. That’s why this gym works.”</p>
+      <b>— Gym owner line (Demo)</b>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="reveal">
+    <h2 class="section-title">Contact</h2>
+    <p class="section-sub">Fastest response on WhatsApp. Seats limited for PT.</p>
+
+    <div class="contact-box">
+      <p><b>Phone:</b> +91 9876543210</p>
+      <p><b>Location:</b> Main Road, Your City</p>
+
+      <div class="contact-actions">
+        <a class="btn primary" href="https://wa.me/919876543210" target="_blank" rel="noopener">WhatsApp Now</a>
+        <a class="btn" href="tel:+919876543210">Call Now</a>
+        <a class="btn" href="mailto:ironbeast@email.com">Email</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 Iron Beast Gym — Demo Website by IamMohdAnas
+</footer>
+
+<!-- Floating quick actions -->
+<div class="float">
+  <a class="wa" href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+  <a class="call" href="tel:+919876543210" aria-label="Call">📞</a>
+</div>
+
+<script>
+/* ===== RIPPLE on buttons ===== */
+document.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", function(e){
+    const circle = document.createElement("span");
+    circle.classList.add("ripple");
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    circle.style.width = circle.style.height = size + "px";
+    circle.style.left = (e.clientX - rect.left - size/2) + "px";
+    circle.style.top  = (e.clientY - rect.top  - size/2) + "px";
+    this.appendChild(circle);
+    setTimeout(() => circle.remove(), 600);
+  });
+});
+
+/* ===== REVEAL on scroll ===== */
+const reveals = document.querySelectorAll(".reveal");
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("show"); });
+},{threshold:0.15});
+reveals.forEach(r=>io.observe(r));
+
+/* ===== THEME TOGGLE (DEFAULT LIGHT ALWAYS) ===== */
+const toggle = document.getElementById("themeToggle");
+
+function setTheme(dark){
+  if(dark){
+    document.body.classList.add("dark");
+    toggle.textContent = "☀️";
+  }else{
+    document.body.classList.remove("dark");
+    toggle.textContent = "🌙";
+  }
+}
+
+toggle.addEventListener("click", ()=>{
+  const isDark = document.body.classList.contains("dark");
+  setTheme(!isDark);
+});
+
+/* Always start in LIGHT */
+setTheme(false);
+</script>
+
+</body>
+</html>
